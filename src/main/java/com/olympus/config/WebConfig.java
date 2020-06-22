@@ -18,6 +18,7 @@ public class WebConfig implements WebMvcConfigurer{
 
     private static final MediaType MEDIA_TYPE_YML = MediaType.valueOf("application/x-yaml");
 
+    @Override
     public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
         converters.add(new YamlJackson2HttpMessageConverter());
     }

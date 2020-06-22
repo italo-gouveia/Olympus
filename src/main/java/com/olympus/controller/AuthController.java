@@ -50,29 +50,33 @@ public class AuthController {
     @PostMapping(value = "/signin", produces = { "application/json", "application/xml", "application/x-yaml" },
     	consumes = { "application/json", "application/xml", "application/x-yaml" })
     public ResponseEntity signin(@RequestBody AccountCredentialsVO data) {
-        try {
+        //TODO: Add type to generic ResponseEntity
+    	//TODO: Add Object to a VO and return him
+    	//TODO: Add this logic of business to a command handler
+    	//TODO: Remove the try catch block
+    	try {
         	 var username = data.getUsername();
              var email = data.getEmail();
              var password = data.getPassword();
 
              var user = service.findByUsernameOrEmail(username, email);
 
-             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUserName(), password));
+             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), password));
 
              var token = "";
 
              if (user.getUsername() != null) {
                  token = tokenProvider.createToken(user.getUsername(), user.getRoles());
              } else {
-                 throw new UsernameNotFoundException("Username " + user.getUserName() + " not found!");
+                 throw new UsernameNotFoundException("Username " + user.getUsername() + " not found!");
              }
 
              Map<Object, Object> model = new HashMap<>();
-             model.put("username", user.getUserName());
+             model.put("username", user.getUsername());
              model.put("token", token);
              return ok(model);
         } catch (AuthenticationException e) {
-        	//TODO: Corrigir falha no lançamento desta exceção
+        	//TODO: Solve the problem that this exception isn't return in the result of request
             throw new BadCredentialsException("Invalid username/password supplied!");
         }
     }
@@ -85,11 +89,13 @@ public class AuthController {
     @PostMapping(value = "/signup", produces = { "application/json", "application/xml", "application/x-yaml" },
             consumes = { "application/json", "application/xml", "application/x-yaml" })
     public ResponseEntity signup(@RequestBody AccountCredentialsVO user) {
-
+        //TODO: Add type to generic ResponseEntity
+    	//TODO: Add Object to a VO and return him
+    	//TODO: Add this logic of business to a command handler
         User data = service.save(user);
 
         Map<Object, Object> model = new HashMap<>();
-        model.put("username", data.getUserName());
+        model.put("username", data.getUsername());
         return ok(model);
     }
 }

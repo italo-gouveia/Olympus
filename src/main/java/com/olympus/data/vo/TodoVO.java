@@ -22,9 +22,6 @@ public class TodoVO extends RepresentationModel<TodoVO> implements Serializable 
     private String name;
     private String description;
 
-    public TodoVO() {
-    }
-
     public Long getKey() {
         return key;
     }

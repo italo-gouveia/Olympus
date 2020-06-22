@@ -10,6 +10,7 @@ import com.olympus.data.model.Todo;
 import com.olympus.data.vo.TodoVO;
 import com.olympus.exception.ResourceNotFoundException;
 import com.olympus.repository.TodoRepository;
+import com.olympus.util.MessagesUtil;
 
 @Service
 public class TodoServices {
@@ -19,8 +20,7 @@ public class TodoServices {
 
     public TodoVO create(TodoVO client) {
         Todo entity = DozerConverter.parseObject(client, Todo.class);
-        TodoVO vo = DozerConverter.parseObject(repository.save(entity), TodoVO.class);
-        return vo;
+        return DozerConverter.parseObject(repository.save(entity), TodoVO.class);
     }
 
     public Page<TodoVO> findTodoByName(String name, Pageable pageable) {
@@ -38,26 +38,25 @@ public class TodoServices {
     }
 
     public TodoVO findById(Long id) {
-
-        Todo entity = repository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("No records found for this ID"));
+    	Todo entity = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(MessagesUtil.NO_RECORDS_FOUND));
         return DozerConverter.parseObject(entity, TodoVO.class);
     }
 
     public TodoVO update(TodoVO client) {
         Todo entity = repository.findById(client.getKey())
-                .orElseThrow(() -> new ResourceNotFoundException("No records found for this ID"));
+                .orElseThrow(() -> new ResourceNotFoundException(MessagesUtil.NO_RECORDS_FOUND));
 
         entity.setName(client.getName());
         entity.setDescription(client.getDescription());
 
-        TodoVO vo = DozerConverter.parseObject(repository.save(entity), TodoVO.class);
-        return vo;
+        return DozerConverter.parseObject(repository.save(entity), TodoVO.class);
     }
 
     public void delete(Long id) {
-        Todo entity = repository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("No records found for this ID"));
+    	Todo entity = null;
+    	entity = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(MessagesUtil.NO_RECORDS_FOUND));
         repository.delete(entity);
     }
 

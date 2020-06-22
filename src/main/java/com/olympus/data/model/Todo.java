@@ -26,9 +26,6 @@ public class Todo implements Serializable {
     @Column(name = "description", nullable = false, length = 255)
     private String description;
 
-    public Todo() {
-    }
-
     public Long getId() {
         return id;
     }

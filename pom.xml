@@ -15,7 +15,10 @@
 	<description>Olympus Boilerplate API</description>
 
 	<properties>
-		<java.version>14</java.version>
+		<java.version>13</java.version>
+		<maven.compiler.source>13</maven.compiler.source>
+    	<maven.compiler.target>13</maven.compiler.target>
+    	<maven.compiler.release>13</maven.compiler.release>
 	</properties>
 	
 	<repositories>
@@ -49,13 +52,6 @@
 			<artifactId>spring-boot-starter-data-rest</artifactId>
 		</dependency>
 		
-		<!-- for HATEOAS support -->
-        <!--
-        <dependency>
-            <groupId>org.springframework.hateoas</groupId>
-            <artifactId>spring-hateoas</artifactId>
-        </dependency>
-		-->
 		<dependency>
 		    <groupId>org.springframework.boot</groupId>
 		    <artifactId>spring-boot-starter-hateoas</artifactId>
@@ -89,22 +85,6 @@
 		  	<artifactId>jackson-dataformat-yaml</artifactId>
 	  	</dependency>
 
-	  	<!-- for Swagger Endpoints support -->
-	  	<!--<dependency>
-		  	<groupId>io.springfox</groupId>
-		  	<artifactId>springfox-swagger2</artifactId>
-		  	<version>2.9.2</version>
-	  	</dependency>
-	  	-->
-
-	  	<!-- for Swagger UI support -->
-	  	<!--<dependency>
-		  	<groupId>io.springfox</groupId>
-		  	<artifactId>springfox-swagger-ui</artifactId>
-		  	<version>2.9.2</version>
-	  	</dependency>
-	  	-->
-	  	
 	  	<!-- io.springfox setup  -->
 		<dependency>
 			<groupId>io.springfox</groupId>
@@ -135,12 +115,7 @@
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
-		<!--
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<optional>true</optional>
-		</dependency>-->
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -166,6 +141,14 @@
 		    <groupId>org.flywaydb</groupId>
 		    <artifactId>flyway-core</artifactId>
 		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/org.sonarsource.scanner.maven/sonar-maven-plugin -->
+		<dependency>
+		    <groupId>org.sonarsource.scanner.maven</groupId>
+		    <artifactId>sonar-maven-plugin</artifactId>
+		    <version>3.7.0.1746</version>
+		</dependency>
+		
 	</dependencies>
 
 	<build>

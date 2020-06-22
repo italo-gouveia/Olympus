@@ -10,9 +10,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.ResponseEntity.BodyBuilder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -50,16 +52,20 @@ public class TodoController {
 
     @ApiOperation(value = "List all Todos" )
     @GetMapping(produces = { "application/json", "application/xml", "application/x-yaml" }, headers = "X-API-VERSION=1")
-    public ResponseEntity<?> findAll(
+    public ResponseEntity<PagedModel<EntityModel<TodoVO>>> findAll(
             @RequestParam(value="page", defaultValue = "0") int page,
             @RequestParam(value="limit", defaultValue = "12") int limit,
             @RequestParam(value="direction", defaultValue = "asc") String direction) {
+    	Page<TodoVO> todos =  null;
+    	PagedModel<EntityModel<TodoVO>> resources = null;
+    	Pageable pageable = null;
+    	Direction sortDirection = null;
+    	
+        sortDirection = DESC_CONST.equalsIgnoreCase(direction) ? Direction.DESC : Direction.ASC;
 
-        Direction sortDirection = DESC_CONST.equalsIgnoreCase(direction) ? Direction.DESC : Direction.ASC;
+        pageable = PageRequest.of(page, limit, Sort.by(sortDirection, "name"));
 
-        Pageable pageable = PageRequest.of(page, limit, Sort.by(sortDirection, "name"));
-
-        Page<TodoVO> todos =  service.findAll(pageable);
+        todos =  service.findAll(pageable);
         todos
                 .stream()
                 .forEach(p -> p.add(
@@ -67,24 +73,28 @@ public class TodoController {
                         )
                 );
 
-        PagedModel<?> resources = assembler.toModel(todos);
+        resources = assembler.toModel(todos);
 
         return new ResponseEntity<>(resources, HttpStatus.OK);
     }
 
     @ApiOperation(value = "Find Todos by name" )
     @GetMapping(value = "/findTodoByName/{name}", produces = { "application/json", "application/xml", "application/x-yaml" }, headers = "X-API-VERSION=1")
-    public ResponseEntity<?> findPersonByName(
+    public ResponseEntity<PagedModel<EntityModel<TodoVO>>> findPersonByName(
             @PathVariable("name") String name,
             @RequestParam(value="page", defaultValue = "0") int page,
             @RequestParam(value="limit", defaultValue = "12") int limit,
             @RequestParam(value="direction", defaultValue = "asc") String direction) {
+    	Page<TodoVO> todos =  null;
+    	PagedModel<EntityModel<TodoVO>> resources = null;
+    	Pageable pageable = null;
+    	Direction sortDirection = null;
+    	
+    	sortDirection = DESC_CONST.equalsIgnoreCase(direction) ? Direction.DESC : Direction.ASC;
 
-        Direction sortDirection = DESC_CONST.equalsIgnoreCase(direction) ? Direction.DESC : Direction.ASC;
+    	pageable = PageRequest.of(page, limit, Sort.by(sortDirection, "name"));
 
-        Pageable pageable = PageRequest.of(page, limit, Sort.by(sortDirection, "name"));
-
-        Page<TodoVO> todos =  service.findTodoByName(name, pageable);
+        todos =  service.findTodoByName(name, pageable);
         todos
                 .stream()
                 .forEach(p -> p.add(
@@ -92,7 +102,7 @@ public class TodoController {
                         )
                 );
 
-        PagedModel<?> resources = assembler.toModel(todos);
+        resources = assembler.toModel(todos);
 
         return new ResponseEntity<>(resources, HttpStatus.OK);
     }
@@ -100,7 +110,8 @@ public class TodoController {
     @ApiOperation(value = "Find a Todo by ID" )
 	@GetMapping(value = "/{id}", produces = { "application/json", "application/xml", "application/x-yaml" }, headers = "X-API-VERSION=1")
 	public TodoVO findById(@PathVariable("id") Long id) {
-		TodoVO todoVO = service.findById(id);
+		TodoVO todoVO = null;
+		todoVO = service.findById(id);
 		todoVO.add(linkTo(methodOn(TodoController.class).findById(id)).withSelfRel());
 		return todoVO;
 	}
@@ -125,7 +136,7 @@ public class TodoController {
 
 	@ApiOperation(value = "Delete a Todo by ID")
 	@DeleteMapping(value="/{id}", headers = "X-API-VERSION=1")
-	public ResponseEntity<?> delete(@PathVariable("id") Long id) {
+	public ResponseEntity<BodyBuilder> delete(@PathVariable("id") Long id) {
 		service.delete(id);
 		return ResponseEntity.ok().build();
 	}

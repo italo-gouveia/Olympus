@@ -31,7 +31,7 @@ public class UserServices implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) {
         var user = repository.findByUsername(username);
         if(user != null) {
             return user;
@@ -40,7 +40,7 @@ public class UserServices implements UserDetailsService {
         }
     }
     
-    public User findByUsernameOrEmail(String username, String email) throws UsernameNotFoundException {
+    public User findByUsernameOrEmail(String username, String email) {
         User user = repository.findByUsernameOrEmail(username, email);
         if(user != null) {
             return user;
