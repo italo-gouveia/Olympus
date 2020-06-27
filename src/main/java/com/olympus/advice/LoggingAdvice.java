@@ -16,7 +16,8 @@ public class LoggingAdvice {
 
 	Logger log = LoggerFactory.getLogger(LoggingAdvice.class);
 	
-	@Pointcut(value="execution(* com.olympus.services.*.*.*(..) )")
+	//@Pointcut(value="execution(* com.olympus.services.*.*.*(..) )")
+	@Pointcut(value="execution(* com.olympus.services.*.*(..) )")
 	public void myPointcut() {
 		
 	}

@@ -18,7 +18,7 @@ import com.olympus.repository.UserRepository;
 import com.olympus.security.AccountCredentialsVO;
 
 @Service
-public class UserServices implements UserDetailsService {
+public class UserServices implements UserDetailsService, IUserService {
 
     @Autowired
     UserRepository repository;
@@ -40,6 +40,7 @@ public class UserServices implements UserDetailsService {
         }
     }
     
+    @Override
     public User findByUsernameOrEmail(String username, String email) {
         User user = repository.findByUsernameOrEmail(username, email);
         if(user != null) {
@@ -49,6 +50,7 @@ public class UserServices implements UserDetailsService {
         }
     }
     
+    @Override
     public User save(AccountCredentialsVO vo) {
         User user = new User();
         user.setEmail(vo.getEmail());
